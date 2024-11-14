@@ -20,7 +20,6 @@ import {
 import { DateValue, getLocalTimeZone, today } from "@internationalized/date";
 import { Toaster, toast } from "sonner";
 import { useEffect, useState } from "react";
-import MainLayout from "@/layouts/main-layout";
 import { companySector, companyType } from "@/utils/select-items";
 import { SignUpCompanyForm } from "@/types/forms/sign-up";
 import { useAuth } from "@/hooks/use-auth";
@@ -28,6 +27,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpCompanySchema } from "@/types/schemas/sign-up";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+
+import MainLayout from "@/layouts/main-layout";
 
 export default function SignUpCompanyPage() {
   const {
