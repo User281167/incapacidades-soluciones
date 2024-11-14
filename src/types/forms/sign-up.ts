@@ -6,7 +6,7 @@ export type SignUpCompanyForm = {
   sector: string;
   address?: string;
   email: string;
-  founded?: string;
+  founded?: Date | string | null;
   leaderName: string;
   leaderLastName: string;
   leaderCedula: string | number;

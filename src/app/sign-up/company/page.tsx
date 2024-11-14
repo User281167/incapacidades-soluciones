@@ -8,14 +8,7 @@ import {
   SelectItem,
   Textarea,
 } from "@nextui-org/react";
-import { DateValue, getLocalTimeZone, today } from "@internationalized/date";
-// import { useForm } from "react-hook-form";
-// import { zodResolver } from "@hookform/resolvers/zod";
-import { Toaster, toast } from "sonner";
-import { useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
 
-import { signUpCompanySchema } from "@/utils/validations/login";
 import {
   backgroundGradient,
   container,
@@ -23,23 +16,34 @@ import {
   subtitle,
   title,
 } from "@/components/primitives";
+
+import { DateValue, getLocalTimeZone, today } from "@internationalized/date";
+import { Toaster, toast } from "sonner";
+import { useCallback, useEffect, useState } from "react";
 import MainLayout from "@/layouts/main-layout";
 import { companySector, companyType } from "@/utils/select-items";
-import { SignUpCompanyForm } from "@/types/loginForms";
+import { SignUpCompanyForm } from "@/types/forms/sign-up";
 import { useAuth } from "@/hooks/use-auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signUpCompanySchema } from "@/types/schemas/sign-up";
+import { useForm } from "react-hook-form";
 
 export default function SignUpCompanyPage() {
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  // } = useForm<SignUpCompanyForm>({
-  //   resolver: zodResolver(signUpCompanySchema),
-  // });
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<SignUpCompanyForm>({
+    resolver: zodResolver(signUpCompanySchema),
+  });
 
   const { signUpLeader, errorMessage, isLogin } = useAuth();
   const [loading, setLoading] = useState(false);
   const [founded, setFounded] = useState<DateValue | null>(null);
+
+  // const founded = register("founded");
+
   // const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,6 +51,12 @@ export default function SignUpCompanyPage() {
       toast.error(errorMessage);
     }
   }, [errorMessage]);
+
+  useEffect(() => {
+    if (founded) {
+      setValue("founded", founded.toString());
+    }
+  }, [founded, setValue]);
 
   // useEffect(() => {
   //   if (isLogin) {
@@ -57,10 +67,13 @@ export default function SignUpCompanyPage() {
 
   const onSubmit = async (data: SignUpCompanyForm) => {
     setLoading(true);
-    data.founded = founded?.toString(); // no se puede obtener la fecha de zod resolver del componente nextui
-    await signUpLeader(data);
+    data.founded = founded?.toString() ?? null;
+    console.log(data);
+    // data.founded = founded?.toString(); // no se puede obtener la fecha de zod resolver del componente nextui
+    // await signUpLeader(data);
     setLoading(false);
   };
+
 
   return (
     <MainLayout>
@@ -87,21 +100,21 @@ export default function SignUpCompanyPage() {
           src="/juicy-patient.png"
         />
       </header>
-      {/* 
+
       <section className={container()}>
         <form
           className="grid grid-cols-1 md:grid-cols-2 gap-10 place-items-center"
-          // onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(onSubmit)}
         >
           <div className="space-y-10 w-full">
             <h2 className={sectionTitle()}>Datos Empresariales</h2>
 
             <Input
-              // errorMessage={errors?.nit?.message}
-              // isInvalid={errors.nit && true}
+              errorMessage={errors?.nit?.message}
+              isInvalid={errors.nit && true}
               label="NIT"
               labelPlacement="outside"
-              // {...register("nit")}
+              {...register("nit")}
             />
             <Input
               errorMessage={errors?.name?.message}
@@ -237,7 +250,6 @@ export default function SignUpCompanyPage() {
 
         <Toaster richColors />
       </section>
-       */}
     </MainLayout>
   );
 }

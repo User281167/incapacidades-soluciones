@@ -1,18 +1,24 @@
 import axios, { AxiosError } from "axios";
 
-import { SignUpCompanyForm } from "@/types/loginForms";
-// import { validateSignUpCompany } from "@/utils/validations/login";
-import { AuthRes } from "@/types/api-res";
+import { SignUpCompanyForm } from "@/types/forms/sign-up";
+import { ApiRes } from "@/types/api-res";
+import { AuthRes } from "@/types/auth";
+import { validateSignUpCompany } from "@/utils/validations/login";
 
 const API = axios.create({
   baseURL: process.env.BACKEND_URL,
   withCredentials: false,
 });
 
-export async function signUpCompany(data: SignUpCompanyForm): Promise<AuthRes> {
-  // if (!validateSignUpCompany(data)) {
-  //   return { errorMessage: "Todos los campos son obligatorios." } as AuthRes;
-  // }
+export async function signUpCompany(
+  data: SignUpCompanyForm
+): Promise<ApiRes<AuthRes>> {
+  if (!validateSignUpCompany(data)) {
+    return {
+      data: {} as AuthRes,
+      errorMessage: "Todos los campos son obligatorios.",
+    };
+  }
 
   const company = {
     nit: data.nit,
@@ -37,7 +43,10 @@ export async function signUpCompany(data: SignUpCompanyForm): Promise<AuthRes> {
   try {
     const res = await API.post("/api/Auth/signup-company", { company, leader });
 
-    return res.data as AuthRes;
+    return {
+      data: res.data as AuthRes,
+      errorMessage: "",
+    };
   } catch (error) {
     const axiosError = error as AxiosError;
 
@@ -46,12 +55,14 @@ export async function signUpCompany(data: SignUpCompanyForm): Promise<AuthRes> {
       typeof axiosError.response.data === "string"
     ) {
       return {
+        data: {} as AuthRes,
         errorMessage: axiosError.response.data,
-      } as AuthRes;
+      };
     }
 
     return {
+      data: {} as AuthRes,
       errorMessage: "Error interno al registrar la empresa.",
-    } as AuthRes;
+    };
   }
 }

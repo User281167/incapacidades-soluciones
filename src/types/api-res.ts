@@ -1,7 +1,4 @@
-import { user } from "./models";
-
-export type AuthRes = {
-  token: string;
-  user: user;
+export type ApiRes<T> = {
+  data: T;
   errorMessage: string;
 };

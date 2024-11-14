@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useState } from "react";
 
-import { user } from "@/types/models";
-import { SignUpCompanyForm } from "@/types/loginForms";
+import { user } from "@/types/models/user";
+import { SignUpCompanyForm } from "@/types/forms/sign-up";
 import { signUpCompany } from "@/services/login.API";
 
 interface contextType {
@@ -27,8 +27,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     if (res.errorMessage) {
       setErrorMessage(res.errorMessage);
     } else {
-      setToken(res.token);
-      setUser(res.user);
+      setToken(res.data.token);
+      setUser(res.data.user);
       setIsLogin(true);
     }
   }, []);

@@ -23,7 +23,7 @@ export const siteConfig = {
   links: {
     signUpCompany: {
       label: "Registra tu empresa",
-      href: "/signup/company",
+      href: "/sign-up/company",
     },
     login: {
       label: "Inicia sesión",
@@ -31,7 +31,7 @@ export const siteConfig = {
     },
     signUp: {
       label: "Regístrate",
-      href: "/signup",
+      href: "/sign-up",
     },
     policy: {
       label: "Política de datos",
