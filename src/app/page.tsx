@@ -1,3 +1,5 @@
+"use client";
+
 import { button as buttonStyles } from "@nextui-org/theme";
 import {
   IconArrowNarrowRight,

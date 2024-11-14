@@ -19,7 +19,7 @@ import {
 
 import { DateValue, getLocalTimeZone, today } from "@internationalized/date";
 import { Toaster, toast } from "sonner";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import MainLayout from "@/layouts/main-layout";
 import { companySector, companyType } from "@/utils/select-items";
 import { SignUpCompanyForm } from "@/types/forms/sign-up";
@@ -73,7 +73,6 @@ export default function SignUpCompanyPage() {
     // await signUpLeader(data);
     setLoading(false);
   };
-
 
   return (
     <MainLayout>

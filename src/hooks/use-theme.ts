@@ -1,4 +1,5 @@
 // originally written by @imoaazahmed
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 
@@ -12,7 +13,11 @@ type Theme = typeof ThemeProps.light | typeof ThemeProps.dark;
 
 export const useTheme = (defaultTheme?: Theme) => {
   const [theme, setTheme] = useState<Theme>(() => {
-    const storedTheme = localStorage.getItem(ThemeProps.key) as Theme | null;
+    let storedTheme = null;
+
+    if (typeof window !== "undefined") {
+      storedTheme = localStorage.getItem(ThemeProps.key) as Theme | null;
+    }
 
     return storedTheme || (defaultTheme ?? ThemeProps.light);
   });
@@ -26,7 +31,9 @@ export const useTheme = (defaultTheme?: Theme) => {
   }, [theme]);
 
   const _setTheme = (theme: Theme) => {
-    localStorage.setItem(ThemeProps.key, theme);
+    if (typeof window !== "undefined") {
+      localStorage.setItem(ThemeProps.key, theme);
+    }
 
     document.documentElement.classList.remove(
       ThemeProps.light,

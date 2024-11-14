@@ -10,8 +10,11 @@ import {
 import LoginModal from "./login-modal";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { siteConfig } from "@/config/site";
+import { usePathname } from "next/navigation";
 
 export const Navbar = () => {
+  const pathname = usePathname();
+
   return (
     <NextUINavbar
       aria-label="Incapacidades y Soluciones Navbar"
@@ -29,7 +32,7 @@ export const Navbar = () => {
 
       <NavbarContent className="flex basis-1/5 sm:basis-full" justify="end">
         <NavbarItem>
-          {location.pathname !== siteConfig.links.login.href && <LoginModal />}
+          {pathname !== siteConfig.links.login.href && <LoginModal />}
         </NavbarItem>
 
         <NavbarItem>
