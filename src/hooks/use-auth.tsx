@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 import { user } from "@/types/models/user";
 import { SignUpCompanyForm } from "@/types/forms/sign-up";
@@ -22,7 +22,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   const [errorMessage, setErrorMessage] = useState<string | null>("");
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
-  const signUpLeader = useCallback(async (data: SignUpCompanyForm) => {
+  const signUpLeader = async (data: SignUpCompanyForm) => {
     setErrorMessage(null);
     const res = await signUpCompany(data);
 
@@ -33,7 +33,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(res.data.user);
       setIsLogin(true);
     }
-  }, []);
+  };
 
   return (
     <userContext.Provider

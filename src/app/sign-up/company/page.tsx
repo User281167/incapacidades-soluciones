@@ -27,6 +27,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpCompanySchema } from "@/types/schemas/sign-up";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 export default function SignUpCompanyPage() {
   const {
@@ -41,10 +42,7 @@ export default function SignUpCompanyPage() {
   const { signUpLeader, errorMessage, isLogin } = useAuth();
   const [loading, setLoading] = useState(false);
   const [founded, setFounded] = useState<DateValue | null>(null);
-
-  // const founded = register("founded");
-
-  // const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     if (errorMessage) {
@@ -58,21 +56,22 @@ export default function SignUpCompanyPage() {
     }
   }, [founded, setValue]);
 
-  // useEffect(() => {
-  //   if (isLogin) {
-  //     toast.success("Registrado exitosamente");
-  //     navigate("/");
-  //   }
-  // }, [isLogin]);
-
   const onSubmit = async (data: SignUpCompanyForm) => {
     setLoading(true);
-    data.founded = founded?.toString() ?? null;
-    console.log(data);
-    // data.founded = founded?.toString(); // no se puede obtener la fecha de zod resolver del componente nextui
-    // await signUpLeader(data);
+    await signUpLeader(data);
     setLoading(false);
   };
+
+  useEffect(() => {
+    if (isLogin) {
+      toast.success("Registrado exitosamente");
+      setLoading(true);
+
+      setTimeout(() => {
+        router.push("/");
+      }, 1000);
+    }
+  }, [isLogin, router]);
 
   return (
     <MainLayout>

@@ -13,10 +13,14 @@ type Theme = typeof ThemeProps.light | typeof ThemeProps.dark;
 
 export const useTheme = (defaultTheme?: Theme) => {
   const [theme, setTheme] = useState<Theme>(() => {
+    // const storedTheme = Cookies.get(ThemeProps.key) as Theme | null;
+
+    // const storedTheme = Cookies.get(ThemeProps.key) as Theme | null;
+
     let storedTheme = null;
 
-    if (typeof window !== "undefined") {
-      storedTheme = localStorage.getItem(ThemeProps.key) as Theme | null;
+    if (typeof window !== "undefined" && window.localStorage) {
+      storedTheme = window.localStorage.getItem(ThemeProps.key) as Theme | null;
     }
 
     return storedTheme || (defaultTheme ?? ThemeProps.light);
@@ -31,8 +35,8 @@ export const useTheme = (defaultTheme?: Theme) => {
   }, [theme]);
 
   const _setTheme = (theme: Theme) => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem(ThemeProps.key, theme);
+    if (typeof window !== "undefined" && window.localStorage) {
+      window.localStorage.setItem(ThemeProps.key, theme);
     }
 
     document.documentElement.classList.remove(
