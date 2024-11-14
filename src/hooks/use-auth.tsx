@@ -1,0 +1,47 @@
+import { createContext, useCallback, useContext, useState } from "react";
+
+import { user } from "@/types/models";
+import { SignUpCompanyForm } from "@/types/loginForms";
+import { signUpCompany } from "@/services/login.API";
+
+interface contextType {
+  token: string;
+  user: user;
+  errorMessage: string | null;
+  isLogin: boolean;
+  signUpLeader: (data: SignUpCompanyForm) => Promise<void>;
+}
+
+const userContext = createContext({} as contextType);
+
+function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<user>({} as user);
+  const [token, setToken] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string | null>("");
+  const [isLogin, setIsLogin] = useState<boolean>(false);
+
+  const signUpLeader = useCallback(async (data: SignUpCompanyForm) => {
+    setErrorMessage(null);
+    const res = await signUpCompany(data);
+
+    if (res.errorMessage) {
+      setErrorMessage(res.errorMessage);
+    } else {
+      setToken(res.token);
+      setUser(res.user);
+      setIsLogin(true);
+    }
+  }, []);
+
+  return (
+    <userContext.Provider
+      value={{ token, user, errorMessage, signUpLeader, isLogin }}
+    >
+      {children}
+    </userContext.Provider>
+  );
+}
+
+const useAuth = () => useContext(userContext);
+
+export { AuthProvider, useAuth };

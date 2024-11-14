@@ -29,11 +29,11 @@ export default {
         light: {
           colors: {
             primary: {
-              DEFAULT: "var(--main-light-blue)",
+              DEFAULT: "#80D9EA",
               foreground: colors.black,
             },
             secondary: {
-              DEFAULT: "var(--main-dark-blue)",
+              DEFAULT: "#1c3850",
               foreground: colors.black,
             },
           },
@@ -41,11 +41,11 @@ export default {
         dark: {
           colors: {
             primary: {
-              DEFAULT: "var(--main-blue)",
+              DEFAULT: "#56A4C1",
               foreground: colors.white,
             },
             secondary: {
-              DEFAULT: "#var(--main-white)",
+              DEFAULT: "#fafeff",
               foreground: colors.white,
             },
           },
