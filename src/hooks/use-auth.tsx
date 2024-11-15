@@ -26,7 +26,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     setErrorMessage(null);
     const res = await signUpCompany(data);
 
-    if (res.errorMessage) {
+    if (!res.success) {
       setErrorMessage(res.errorMessage);
     } else {
       setToken(res.data.token);

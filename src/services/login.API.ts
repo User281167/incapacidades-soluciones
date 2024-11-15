@@ -13,10 +13,15 @@ const API = axios.create({
 export async function signUpCompany(
   data: SignUpCompanyForm
 ): Promise<ApiRes<AuthRes>> {
-  if (!validateSignUpCompany(data)) {
+  const checkForm = validateSignUpCompany(data);
+
+  if (!checkForm.success) {
     return {
       data: {} as AuthRes,
-      errorMessage: "Todos los campos son obligatorios.",
+      success: false,
+      errorMessage:
+        checkForm.message ??
+        "Campos obligatorios no completados, o revisa los datos ingresados (emails, tipo de empresa, sector de la empresa).",
     };
   }
 
@@ -45,6 +50,7 @@ export async function signUpCompany(
 
     return {
       data: res.data as AuthRes,
+      success: true,
       errorMessage: "",
     };
   } catch (error) {
@@ -52,16 +58,18 @@ export async function signUpCompany(
 
     if (
       axiosError.response?.status === 400 &&
-      typeof axiosError.response.data === "string"
+      typeof axiosError.response?.data === "string"
     ) {
       return {
         data: {} as AuthRes,
-        errorMessage: axiosError.response.data,
+        success: false,
+        errorMessage: axiosError.response?.data as string,
       };
     }
 
     return {
       data: {} as AuthRes,
+      success: false,
       errorMessage: "Error interno al registrar la empresa.",
     };
   }
