@@ -4,6 +4,7 @@ import { SignUpCompanyForm } from "@/types/forms/sign-up";
 import { ApiRes } from "@/types/api-res";
 import { AuthRes } from "@/types/auth";
 import { validateSignUpCompany } from "@/utils/validations/login";
+import { getApiErrorMessage } from "./error-api";
 
 const API = axios.create({
   baseURL: process.env.BACKEND_URL,
@@ -54,23 +55,12 @@ export async function signUpCompany(
       errorMessage: "",
     };
   } catch (error) {
-    const axiosError = error as AxiosError;
-
-    if (
-      axiosError.response?.status === 400 &&
-      typeof axiosError.response?.data === "string"
-    ) {
-      return {
-        data: {} as AuthRes,
-        success: false,
-        errorMessage: axiosError.response?.data as string,
-      };
-    }
+    const errorMessage = getApiErrorMessage(error);
 
     return {
       data: {} as AuthRes,
       success: false,
-      errorMessage: "Error interno al registrar la empresa.",
+      errorMessage: errorMessage ?? "Error interno al registrar la empresa.",
     };
   }
 }
