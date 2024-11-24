@@ -43,7 +43,7 @@ export default function LoginModal() {
             <ModalBody className="p-0 flex flex-row">
               <img alt="" className="hidden md:block w-1/2" src="/icon.jpeg" />
 
-              <Login onClose={onClose} />
+              <Login />
             </ModalBody>
           )}
         </ModalContent>

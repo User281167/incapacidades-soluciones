@@ -113,3 +113,34 @@ export async function signUpEmployee(
     };
   }
 }
+
+export async function loginByCedula(
+  cedula: string | number,
+  password: string
+): Promise<ApiRes<AuthRes>> {
+  if (!cedula || !password) {
+    return {
+      data: {} as AuthRes,
+      success: false,
+      errorMessage: "Campos obligatorios no completados.",
+    };
+  }
+
+  try {
+    const res = await API.post("/api/Auth/login", { cedula, password });
+
+    return {
+      data: res.data as AuthRes,
+      success: true,
+      errorMessage: "",
+    };
+  } catch (error) {
+    const errorMessage = getApiErrorMessage(error);
+
+    return {
+      data: {} as AuthRes,
+      success: false,
+      errorMessage: errorMessage ?? "Error al intentar iniciar sesión.",
+    };
+  }
+}

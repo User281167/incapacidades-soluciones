@@ -120,7 +120,7 @@ describe("Auth context signUp", () => {
     });
   });
 
-  test("signUpLeader inputs empty", async () => {
+  test("signUp inputs empty", async () => {
     const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
 
     await act(async () => {
@@ -170,6 +170,85 @@ describe("Auth context signUp", () => {
 
     await act(async () => {
       await result.current.signUp(formData);
+    });
+
+    await act(async () => {
+      expect(result.current.errorMessage).toBe(null);
+      expect(result.current.isLogin).toBe(true);
+      expect(result.current.user.name).toBe("test");
+    });
+  });
+});
+
+describe("Auth context login", () => {
+  beforeEach(() => {
+    mockAxios.get.mockClear();
+    mockAxios.post.mockClear();
+  });
+
+  const formData = {
+    cedula: "12345678",
+    password: "string",
+  };
+
+  test("Is login false", async () => {
+    const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
+
+    await act(async () => {
+      expect(result.current.isLogin).toBe(false);
+    });
+  });
+
+  test("login inputs empty", async () => {
+    const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
+
+    await act(async () => {
+      await result.current.signUp({} as SignUpEmployeeForm);
+    });
+
+    await act(async () => {
+      expect(result.current.errorMessage).not.toBe(null);
+      expect(result.current.isLogin).toBe(false);
+    });
+  });
+
+  test("Form data error", async () => {
+    const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
+
+    const form = { ...formData, email: "test" };
+
+    await act(async () => {
+      await result.current.login(form.cedula, form.password);
+    });
+
+    await act(async () => {
+      expect(result.current.errorMessage).not.toBe(null);
+      expect(result.current.isLogin).toBe(false);
+    });
+  });
+
+  test("Error with request", async () => {
+    const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
+
+    await act(async () => {
+      await result.current.login(formData.cedula, formData.password);
+    });
+
+    await act(async () => {
+      expect(result.current.errorMessage).not.toBe(null);
+      expect(result.current.isLogin).toBe(false);
+    });
+  });
+
+  test("Is login success", async () => {
+    mockAxios.post.mockResolvedValueOnce({
+      data: { token: "token", user: { name: "test" } as User },
+    });
+
+    const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
+
+    await act(async () => {
+      await result.current.login(formData.cedula, formData.password);
     });
 
     await act(async () => {
