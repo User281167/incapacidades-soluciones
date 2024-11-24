@@ -11,6 +11,7 @@ interface contextType {
   user: user;
   errorMessage: string | null;
   isLogin: boolean;
+  loading: boolean;
   signUpLeader: (data: SignUpCompanyForm) => Promise<void>;
 }
 
@@ -21,9 +22,11 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>("");
   const [isLogin, setIsLogin] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const signUpLeader = async (data: SignUpCompanyForm) => {
     setErrorMessage(null);
+    setLoading(true);
     const res = await signUpCompany(data);
 
     if (!res.success) {
@@ -33,11 +36,13 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(res.data.user);
       setIsLogin(true);
     }
+
+    setLoading(false);
   };
 
   return (
     <userContext.Provider
-      value={{ token, user, errorMessage, signUpLeader, isLogin }}
+      value={{ token, user, errorMessage, signUpLeader, isLogin, loading }}
     >
       {children}
     </userContext.Provider>

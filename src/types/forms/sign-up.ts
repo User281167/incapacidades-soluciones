@@ -14,3 +14,13 @@ export type SignUpCompanyForm = {
   leaderEmail: string;
   leaderPassword: string;
 };
+
+export type SignUpEmployeeForm = {
+  accessCode: string;
+  name: string;
+  lastName: string;
+  cedula: string | number;
+  phone?: string;
+  email: string;
+  password: string;
+};

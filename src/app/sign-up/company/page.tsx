@@ -17,18 +17,20 @@ import {
   title,
 } from "@/components/primitives";
 
-import { DateValue, getLocalTimeZone, today } from "@internationalized/date";
-import { Toaster, toast } from "sonner";
-import { useEffect, useState } from "react";
+import MainLayout from "@/layouts/main-layout";
+
 import { companySector, companyType } from "@/utils/select-items";
 import { SignUpCompanyForm } from "@/types/forms/sign-up";
-import { useAuth } from "@/hooks/use-auth";
+import { SignUpCompanySchema } from "@/types/schemas/sign-up";
+
+import { DateValue, getLocalTimeZone, today } from "@internationalized/date";
+import { Toaster, toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signUpCompanySchema } from "@/types/schemas/sign-up";
+
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-
-import MainLayout from "@/layouts/main-layout";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function SignUpCompanyPage() {
   const {
@@ -37,11 +39,10 @@ export default function SignUpCompanyPage() {
     setValue,
     formState: { errors },
   } = useForm<SignUpCompanyForm>({
-    resolver: zodResolver(signUpCompanySchema),
+    resolver: zodResolver(SignUpCompanySchema),
   });
 
-  const { signUpLeader, errorMessage, isLogin } = useAuth();
-  const [loading, setLoading] = useState(false);
+  const { signUpLeader, errorMessage, isLogin, loading } = useAuth();
   const [founded, setFounded] = useState<DateValue | null>(null);
   const router = useRouter();
 
@@ -58,15 +59,16 @@ export default function SignUpCompanyPage() {
   }, [founded, setValue]);
 
   const onSubmit = async (data: SignUpCompanyForm) => {
-    setLoading(true);
+    if (isLogin) {
+      return;
+    }
+
     await signUpLeader(data);
-    setLoading(false);
   };
 
   useEffect(() => {
     if (isLogin) {
       toast.success("Registrado exitosamente");
-      setLoading(true);
 
       setTimeout(() => {
         router.push("/");
