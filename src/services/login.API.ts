@@ -1,9 +1,14 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
-import { SignUpCompanyForm } from "@/types/forms/sign-up";
-import { ApiRes } from "@/types/api-res";
 import { AuthRes } from "@/types/auth";
-import { validateSignUpCompany } from "@/utils/validations/login";
+import { ApiRes } from "@/types/api-res";
+import { SignUpCompanyForm, SignUpEmployeeForm } from "@/types/forms/sign-up";
+
+import {
+  validateSignUpCompany,
+  validateSignUpEmployee,
+} from "@/utils/validations/login";
+
 import { getApiErrorMessage } from "./error-api";
 
 const API = axios.create({
@@ -61,6 +66,50 @@ export async function signUpCompany(
       data: {} as AuthRes,
       success: false,
       errorMessage: errorMessage ?? "Error interno al registrar la empresa.",
+    };
+  }
+}
+
+export async function signUpEmployee(
+  data: SignUpEmployeeForm
+): Promise<ApiRes<AuthRes>> {
+  const checkForm = validateSignUpEmployee(data);
+
+  if (!checkForm.success) {
+    return {
+      data: {} as AuthRes,
+      success: false,
+      errorMessage:
+        checkForm.message ??
+        "Campos obligatorios no completados, o revisa los datos ingresados (emails, tipo de empresa, sector de la empresa).",
+    };
+  }
+
+  const employee = {
+    accessCode: data.accessCode,
+    name: data.name,
+    lastName: data.lastName,
+    cedula: data.cedula,
+    phone: data.phone,
+    email: data.email,
+    password: data.password,
+  };
+
+  try {
+    const res = await API.post("/api/Auth/signup-employee", { employee });
+
+    return {
+      data: res.data as AuthRes,
+      success: true,
+      errorMessage: "",
+    };
+  } catch (error) {
+    const errorMessage = getApiErrorMessage(error);
+
+    return {
+      data: {} as AuthRes,
+      success: false,
+      errorMessage: errorMessage ?? "Error interno al registrar el empleado.",
     };
   }
 }

@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, test } from "vitest";
 import { AuthProvider, useAuth } from "@/hooks/use-auth";
 import { act, renderHook } from "@testing-library/react";
 import { SignUpCompanyForm } from "@/types/forms/sign-up";
-import { user } from "@/types/models/user";
+import { User } from "@/types/models/user";
 import { mockAxios } from "../mocks/axios-mock";
 
 describe("Auth context signUpCompany", () => {
@@ -79,7 +79,7 @@ describe("Auth context signUpCompany", () => {
 
   test("Is login success signUpLeader", async () => {
     mockAxios.post.mockResolvedValueOnce({
-      data: { token: "token", user: { name: "test" } as user },
+      data: { token: "token", user: { name: "test" } as User },
     });
 
     const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });

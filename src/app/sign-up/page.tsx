@@ -28,7 +28,7 @@ export default function Page() {
     resolver: zodResolver(SignUpEmployeeSchema),
   });
 
-  const { errorMessage, isLogin, loading } = useAuth();
+  const { signUp, errorMessage, isLogin, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -47,7 +47,13 @@ export default function Page() {
     }
   }, [isLogin, router]);
 
-  const onSubmit = async (data: SignUpEmployeeForm) => {};
+  const onSubmit = async (data: SignUpEmployeeForm) => {
+    if (isLogin) {
+      return;
+    }
+
+    await signUp(data);
+  };
 
   return (
     <MainLayout>
