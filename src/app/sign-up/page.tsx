@@ -73,7 +73,6 @@ export default function Page() {
               errorMessage={errors.accessCode?.message}
               isInvalid={errors.accessCode && true}
               label="Código de acceso"
-              type="number"
               variant="bordered"
               {...register("accessCode")}
             />
