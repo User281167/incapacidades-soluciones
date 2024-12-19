@@ -203,7 +203,7 @@ export function SignUpForm() {
             label="Contraseña"
             labelPlacement="outside"
             type="password"
-            {...register("leaderPassword")}
+            {...register("password")}
           />
 
           <Button
