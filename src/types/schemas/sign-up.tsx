@@ -26,9 +26,7 @@ export const SignUpCompanySchema: ZodType<SignUpCompanyForm> = z.object({
   leaderCedula: z.string().min(7, "La cédula debe tener al 7 caracteres"),
   leaderPhone: z.string().optional(),
   leaderEmail: z.string().email("Email invalido"),
-  leaderPassword: z
-    .string()
-    .min(6, "La contraseña debe tener mínimo 6 caracteres"),
+  password: z.string().min(6, "La contraseña debe tener mínimo 6 caracteres"),
 });
 
 export const SignUpEmployeeSchema: ZodType<SignUpEmployeeForm> = z.object({

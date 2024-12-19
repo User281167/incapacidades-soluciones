@@ -10,9 +10,10 @@ import {
 } from "@/utils/validations/login";
 
 import { getApiErrorMessage } from "./error-api";
+import { BACKEND_URL } from "@/utils/env-config";
 
 const API = axios.create({
-  baseURL: process.env.BACKEND_URL,
+  baseURL: BACKEND_URL,
   withCredentials: false,
 });
 
@@ -31,28 +32,25 @@ export async function signUpCompany(
     };
   }
 
-  const company = {
+  const req: SignUpCompanyForm = {
     nit: data.nit,
     name: data.name,
     description: data.description,
+    email: data.email,
+    founded: data.founded,
+    address: data.address,
     type: data.type.toLowerCase(),
     sector: data.sector.toLowerCase(),
-    address: data.address,
-    email: data.email,
-    founded: data.founded ?? "",
-  };
-
-  const leader = {
-    name: data.leaderName,
-    lastName: data.leaderLastName,
-    cedula: data.leaderCedula,
-    phone: data.leaderPhone,
-    email: data.leaderEmail,
-    password: data.leaderPassword,
+    leaderName: data.leaderName,
+    leaderLastName: data.leaderLastName,
+    leaderCedula: data.leaderCedula,
+    leaderPhone: data.leaderPhone,
+    leaderEmail: data.leaderEmail,
+    password: data.password,
   };
 
   try {
-    const res = await API.post("/api/Auth/signup-company", { company, leader });
+    const res = await API.post("/api/Auth/signup-company", req);
 
     return {
       data: res.data as AuthRes,
@@ -61,6 +59,8 @@ export async function signUpCompany(
     };
   } catch (error) {
     const errorMessage = getApiErrorMessage(error);
+
+    console.log(error);
 
     return {
       data: {} as AuthRes,

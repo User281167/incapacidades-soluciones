@@ -12,7 +12,7 @@ export type SignUpCompanyForm = {
   leaderCedula: string | number;
   leaderPhone?: string;
   leaderEmail: string;
-  leaderPassword: string;
+  password: string;
 };
 
 export type SignUpEmployeeForm = {

@@ -41,5 +41,9 @@ export const siteConfig = {
       label: "Términos y Condiciones",
       href: "/legal/terms",
     },
+    dashboard: {
+      label: "Dashboard",
+      href: "/dashboard",
+    },
   },
 };

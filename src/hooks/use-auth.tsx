@@ -2,15 +2,18 @@
 
 import { createContext, useContext, useState } from "react";
 
-import { User } from "@/types/models/user";
 import { SignUpCompanyForm, SignUpEmployeeForm } from "@/types/forms/sign-up";
+import { AuthRes } from "@/types/auth";
+import { ApiRes } from "@/types/api-res";
+import { User } from "@/types/models/user";
+
 import {
   loginByCedula,
   signUpCompany,
   signUpEmployee,
 } from "@/services/login.API";
-import { ApiRes } from "@/types/api-res";
-import { AuthRes } from "@/types/auth";
+
+import Cookies from "js-cookie";
 
 interface contextType {
   token: string;
@@ -26,11 +29,21 @@ interface contextType {
 const userContext = createContext({} as contextType);
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User>({} as User);
-  const [token, setToken] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>("");
-  const [isLogin, setIsLogin] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const [isLogin, setIsLogin] = useState<boolean>(() => {
+    return Cookies.get("token") !== undefined;
+  });
+
+  const [user, setUser] = useState<User>(() => {
+    const user = Cookies.get("user");
+    return user ? JSON.parse(user) : ({} as User);
+  });
+
+  const [token, setToken] = useState<string>(() => {
+    return Cookies.get("token") ?? "";
+  });
 
   const apiCheckAuth = async (res: ApiRes<AuthRes>) => {
     if (!res.success) {
@@ -49,7 +62,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
     setErrorMessage(null);
     setLoading(true);
-    const res = await signUpCompany(data);
+    const res: ApiRes<AuthRes> = await signUpCompany(data);
     apiCheckAuth(res);
   };
 
@@ -58,7 +71,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
     setErrorMessage(null);
     setLoading(true);
-    const res = await signUpEmployee(data);
+    const res: ApiRes<AuthRes> = await signUpEmployee(data);
     apiCheckAuth(res);
   };
 
@@ -67,7 +80,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
     setErrorMessage(null);
     setLoading(true);
-    const res = await loginByCedula(cedula, password);
+    const res: ApiRes<AuthRes> = await loginByCedula(cedula, password);
     apiCheckAuth(res);
   };
 
