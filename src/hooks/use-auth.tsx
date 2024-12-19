@@ -33,18 +33,15 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [isLogin, setIsLogin] = useState<boolean>(() => {
-    console.log(Cookies.get("token"));
     return Cookies.get("token") !== undefined;
   });
 
   const [user, setUser] = useState<User>(() => {
     const user = Cookies.get("user");
-    console.log(user);
     return user ? JSON.parse(user) : ({} as User);
   });
 
   const [token, setToken] = useState<string>(() => {
-    console.log(Cookies.get("token"));
     return Cookies.get("token") ?? "";
   });
 
