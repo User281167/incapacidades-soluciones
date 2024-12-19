@@ -33,15 +33,18 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [isLogin, setIsLogin] = useState<boolean>(() => {
+    console.log(Cookies.get("token"));
     return Cookies.get("token") !== undefined;
   });
 
   const [user, setUser] = useState<User>(() => {
     const user = Cookies.get("user");
+    console.log(user);
     return user ? JSON.parse(user) : ({} as User);
   });
 
   const [token, setToken] = useState<string>(() => {
+    console.log(Cookies.get("token"));
     return Cookies.get("token") ?? "";
   });
 
@@ -52,6 +55,9 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       setToken(res.data.token);
       setUser(res.data.user);
       setIsLogin(true);
+
+      Cookies.set("token", res.data.token);
+      Cookies.set("user", JSON.stringify(res.data.user));
     }
 
     setLoading(false);
