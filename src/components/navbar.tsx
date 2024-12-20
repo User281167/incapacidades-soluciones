@@ -7,13 +7,19 @@ import {
   NavbarContent,
   NavbarItem,
 } from "@nextui-org/react";
+
+import { button as buttonStyles } from "@nextui-org/theme";
+
 import LoginModal from "./login-modal";
+
 import { ThemeSwitch } from "@/components/theme-switch";
 import { siteConfig } from "@/config/site";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Navbar = () => {
   const pathname = usePathname();
+  const { isLogin } = useAuth();
 
   return (
     <NextUINavbar
@@ -32,7 +38,20 @@ export const Navbar = () => {
 
       <NavbarContent className="flex basis-1/5 sm:basis-full" justify="end">
         <NavbarItem>
-          {pathname !== siteConfig.links.login.href && <LoginModal />}
+          {pathname !== siteConfig.links.login.href && !isLogin && (
+            <LoginModal />
+          )}
+          {isLogin && (
+            <Link
+              className={
+                buttonStyles({ variant: "bordered" }) +
+                "shadow-lg hover:shadow-2xl duration-100"
+              }
+              href={siteConfig.links.dashboard.href}
+            >
+              Dashboard
+            </Link>
+          )}
         </NavbarItem>
 
         <NavbarItem>

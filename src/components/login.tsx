@@ -1,13 +1,17 @@
+"use client";
+
 import { Button, Input, Link } from "@nextui-org/react";
 import { IconLock, IconMail } from "@tabler/icons-react";
 import { Toaster, toast } from "sonner";
 
 import { siteConfig } from "@/config/site";
 import { useAuth } from "@/hooks/use-auth";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Login() {
   const { login, errorMessage, loading } = useAuth();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   useEffect(() => {
     if (errorMessage) {
@@ -16,12 +20,10 @@ export default function Login() {
   }, [errorMessage]);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    if (loading) return;
-    e.preventDefault();
-
-    const cedula = e.target[0].value as string;
-    const password = e.target[1].value as string;
-    await login(cedula, password);
+    if (!loading) {
+      e.preventDefault();
+      await login(email, password);
+    }
   };
 
   return (
@@ -36,8 +38,10 @@ export default function Login() {
         endContent={
           <IconMail className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
         }
-        name="cedula"
-        placeholder="Cédula"
+        name="email"
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Email"
+        type="email"
         variant="bordered"
       />
 
@@ -47,6 +51,7 @@ export default function Login() {
           <IconLock className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
         }
         name="password"
+        onChange={(e) => setPassword(e.target.value)}
         placeholder="Contraseña"
         type="password"
         variant="bordered"

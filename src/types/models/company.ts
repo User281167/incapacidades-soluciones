@@ -1,12 +1,11 @@
-export type company = {
+export type Company = {
   id?: string;
   nit: string;
   name: string;
-  description: string;
+  description?: string;
   email: string;
-  address: string;
+  founded?: string | Date | null;
+  address?: string;
   type: string;
   sector: string;
-  founded: string;
-  joinDate: string;
 };
