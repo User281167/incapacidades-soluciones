@@ -46,6 +46,9 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   });
 
   const apiCheckAuth = async (res: ApiRes<AuthRes>) => {
+    // Check if the response is successful ans set user data
+    // API response always returns a APIRes object
+
     if (!res.success) {
       setErrorMessage(res.errorMessage);
     } else {

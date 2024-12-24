@@ -85,18 +85,8 @@ export async function signUpEmployee(
     };
   }
 
-  const employee = {
-    accessCode: data.accessCode,
-    name: data.name,
-    lastName: data.lastName,
-    cedula: data.cedula,
-    phone: data.phone,
-    email: data.email,
-    password: data.password,
-  };
-
   try {
-    const res = await API.post("/api/Auth/signup-employee", { employee });
+    const res = await API.post("/api/Auth/signup-user", data);
 
     return {
       data: res.data as AuthRes,
