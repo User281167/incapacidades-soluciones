@@ -104,11 +104,11 @@ export async function signUpEmployee(
   }
 }
 
-export async function loginByCedula(
-  cedula: string | number,
+export async function loginUser(
+  email: string,
   password: string
 ): Promise<ApiRes<AuthRes>> {
-  if (!cedula || !password) {
+  if (!email || !password) {
     return {
       data: {} as AuthRes,
       success: false,
@@ -117,7 +117,7 @@ export async function loginByCedula(
   }
 
   try {
-    const res = await API.post("/api/Auth/login", { cedula, password });
+    const res = await API.post("/api/Auth/login", { email, password });
 
     return {
       data: res.data as AuthRes,

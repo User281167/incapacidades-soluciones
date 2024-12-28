@@ -7,11 +7,7 @@ import { AuthRes } from "@/types/auth";
 import { ApiRes } from "@/types/api-res";
 import { User } from "@/types/models/user";
 
-import {
-  loginByCedula,
-  signUpCompany,
-  signUpEmployee,
-} from "@/services/login.API";
+import { loginUser, signUpCompany, signUpEmployee } from "@/services/login.API";
 
 import Cookies from "js-cookie";
 
@@ -23,7 +19,7 @@ interface contextType {
   loading: boolean;
   signUpLeader: (data: SignUpCompanyForm) => Promise<void>;
   signUp: (data: SignUpEmployeeForm) => Promise<void>;
-  login: (cedula: string | number, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<void>;
 }
 
 const userContext = createContext({} as contextType);
@@ -81,12 +77,12 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     apiCheckAuth(res);
   };
 
-  const login = async (cedula: string | number, password: string) => {
+  const login = async (email: string, password: string) => {
     if (isLogin) return;
 
     setErrorMessage(null);
     setLoading(true);
-    const res: ApiRes<AuthRes> = await loginByCedula(cedula, password);
+    const res: ApiRes<AuthRes> = await loginUser(email, password);
     apiCheckAuth(res);
   };
 

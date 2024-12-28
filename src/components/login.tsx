@@ -20,8 +20,9 @@ export default function Login() {
   }, [errorMessage]);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     if (!loading) {
-      e.preventDefault();
       await login(email, password);
     }
   };
@@ -62,7 +63,7 @@ export default function Login() {
       </Link>
 
       <Button disabled={loading} type="submit" variant="bordered">
-        Iniciar sesión
+        {loading ? "Iniciando sesión..." : "Iniciar sesión"}
       </Button>
 
       <div className="flex flex-col gap-2 mt-10 text-sm">
