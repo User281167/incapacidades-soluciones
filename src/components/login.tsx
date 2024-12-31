@@ -5,13 +5,18 @@ import { IconLock, IconMail } from "@tabler/icons-react";
 import { Toaster, toast } from "sonner";
 
 import { siteConfig } from "@/config/site";
+
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/hooks/use-auth";
-import { useEffect, useState } from "react";
+
+import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+
+import { LoginSchema } from "@/types/schemas/sign-up";
+import { LoginForm } from "@/types/forms/sign-up";
 
 export default function Login() {
   const { login, errorMessage, loading } = useAuth();
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
 
   useEffect(() => {
     if (errorMessage) {
@@ -19,18 +24,24 @@ export default function Login() {
     }
   }, [errorMessage]);
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const onSubmit = async (data: LoginForm) => {
     if (!loading) {
-      await login(email, password);
+      await login(data);
     }
   };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginForm>({
+    resolver: zodResolver(LoginSchema),
+  });
 
   return (
     <form
       className="flex flex-col p-8 md:p-0 md:w-1/2 max-w-sm justify-center items-center gap-4 mx-auto lg:my-32"
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <h2 className="text-2xl font-bold">Inicia sesión</h2>
 
@@ -39,11 +50,12 @@ export default function Login() {
         endContent={
           <IconMail className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
         }
-        name="email"
-        onChange={(e) => setEmail(e.target.value)}
+        errorMessage={errors.email?.message}
+        isInvalid={errors.email && true}
         placeholder="Email"
         type="email"
         variant="bordered"
+        {...register("email")}
       />
 
       <Input
@@ -51,11 +63,12 @@ export default function Login() {
         endContent={
           <IconLock className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
         }
-        name="password"
-        onChange={(e) => setPassword(e.target.value)}
+        errorMessage={errors.password?.message}
+        isInvalid={errors.password && true}
         placeholder="Contraseña"
         type="password"
         variant="bordered"
+        {...register("password")}
       />
 
       <Link className="w-full text-sm" href="#">

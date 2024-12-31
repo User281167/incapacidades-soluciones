@@ -2,7 +2,11 @@
 
 import { createContext, useContext, useState } from "react";
 
-import { SignUpCompanyForm, SignUpEmployeeForm } from "@/types/forms/sign-up";
+import {
+  LoginForm,
+  SignUpCompanyForm,
+  SignUpEmployeeForm,
+} from "@/types/forms/sign-up";
 import { AuthRes } from "@/types/auth";
 import { ApiRes } from "@/types/api-res";
 import { User } from "@/types/models/user";
@@ -19,7 +23,7 @@ interface contextType {
   loading: boolean;
   signUpLeader: (data: SignUpCompanyForm) => Promise<void>;
   signUp: (data: SignUpEmployeeForm) => Promise<void>;
-  login: (email: string, password: string) => Promise<void>;
+  login: (credentials: LoginForm) => Promise<void>;
 }
 
 const userContext = createContext({} as contextType);
@@ -77,12 +81,12 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     apiCheckAuth(res);
   };
 
-  const login = async (email: string, password: string) => {
+  const login = async (credentials: LoginForm) => {
     if (isLogin) return;
 
     setErrorMessage(null);
     setLoading(true);
-    const res: ApiRes<AuthRes> = await loginUser(email, password);
+    const res: ApiRes<AuthRes> = await loginUser(credentials);
     apiCheckAuth(res);
   };
 

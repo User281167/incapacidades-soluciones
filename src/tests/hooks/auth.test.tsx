@@ -192,8 +192,8 @@ describe("Auth context login", () => {
   });
 
   const formData = {
-    cedula: "12345678",
-    password: "string",
+    email: "test@mail.com",
+    password: "123456",
   };
 
   test("Is login false", async () => {
@@ -223,7 +223,7 @@ describe("Auth context login", () => {
     const form = { ...formData, email: "test" };
 
     await act(async () => {
-      await result.current.login(form.cedula, form.password);
+      await result.current.login(form);
     });
 
     await act(async () => {
@@ -236,7 +236,7 @@ describe("Auth context login", () => {
     const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
 
     await act(async () => {
-      await result.current.login(formData.cedula, formData.password);
+      await result.current.login(formData);
     });
 
     await act(async () => {
@@ -253,7 +253,7 @@ describe("Auth context login", () => {
     const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
 
     await act(async () => {
-      await result.current.login(formData.cedula, formData.password);
+      await result.current.login(formData);
     });
 
     await act(async () => {

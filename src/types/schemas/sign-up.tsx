@@ -1,6 +1,10 @@
 import { z, ZodType } from "zod";
 import { companySector, companyType } from "@/utils/select-items";
-import { SignUpCompanyForm, SignUpEmployeeForm } from "@/types/forms/sign-up";
+import {
+  LoginForm,
+  SignUpCompanyForm,
+  SignUpEmployeeForm,
+} from "@/types/forms/sign-up";
 
 export const SignUpCompanySchema: ZodType<SignUpCompanyForm> = z.object({
   nit: z.string().min(1, "El NIT es obligatorio"),
@@ -37,6 +41,11 @@ export const SignUpEmployeeSchema: ZodType<SignUpEmployeeForm> = z.object({
   lastName: z.string().min(1, "El apellido es obligatorio"),
   cedula: z.string().min(7, "La cédula debe tener al 7 caracteres"),
   phone: z.string().optional(),
+  email: z.string().email("Email invalido"),
+  password: z.string().min(6, "La contraseña debe tener mínimo 6 caracteres"),
+});
+
+export const LoginSchema: ZodType<LoginForm> = z.object({
   email: z.string().email("Email invalido"),
   password: z.string().min(6, "La contraseña debe tener mínimo 6 caracteres"),
 });

@@ -2,9 +2,14 @@ import axios from "axios";
 
 import { AuthRes } from "@/types/auth";
 import { ApiRes } from "@/types/api-res";
-import { SignUpCompanyForm, SignUpEmployeeForm } from "@/types/forms/sign-up";
+import {
+  LoginForm,
+  SignUpCompanyForm,
+  SignUpEmployeeForm,
+} from "@/types/forms/sign-up";
 
 import {
+  validateLogin,
   validateSignUpCompany,
   validateSignUpEmployee,
 } from "@/utils/validations/login";
@@ -105,10 +110,11 @@ export async function signUpEmployee(
 }
 
 export async function loginUser(
-  email: string,
-  password: string
+  credentials: LoginForm
 ): Promise<ApiRes<AuthRes>> {
-  if (!email || !password) {
+  const checkForm = validateLogin(credentials);
+
+  if (!checkForm.success) {
     return {
       data: {} as AuthRes,
       success: false,
@@ -117,7 +123,7 @@ export async function loginUser(
   }
 
   try {
-    const res = await API.post("/api/Auth/login", { email, password });
+    const res = await API.post("/api/Auth/login", credentials);
 
     return {
       data: res.data as AuthRes,
