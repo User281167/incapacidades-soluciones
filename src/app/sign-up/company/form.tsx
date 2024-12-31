@@ -9,6 +9,7 @@ import {
   Select,
   SelectItem,
   Textarea,
+  CircularProgress,
 } from "@nextui-org/react";
 
 import { companySector, companyType } from "@/utils/select-items";
@@ -212,7 +213,7 @@ export function SignUpForm() {
             disabled={loading}
             type="submit"
           >
-            Crear cuenta
+            {loading ? <CircularProgress size="sm" /> : "Crear cuenta"}
           </Button>
         </div>
       </form>

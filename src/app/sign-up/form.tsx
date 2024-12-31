@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, CircularProgress } from "@nextui-org/react";
 import { IconAccessible, IconLock } from "@tabler/icons-react";
 
 import { SignUpEmployeeForm } from "@/types/forms/sign-up";
@@ -135,7 +135,7 @@ export function SignUpForm() {
           type="submit"
           variant="bordered"
         >
-          Crear cuenta
+          {loading ? <CircularProgress size="sm" /> : "Crear cuenta"}
         </Button>
       </form>
     </>

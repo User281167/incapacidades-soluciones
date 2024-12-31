@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input, Link } from "@nextui-org/react";
+import { Button, Input, Link, CircularProgress } from "@nextui-org/react";
 import { IconLock, IconMail } from "@tabler/icons-react";
 import { Toaster, toast } from "sonner";
 
@@ -76,7 +76,7 @@ export default function Login() {
       </Link>
 
       <Button disabled={loading} type="submit" variant="bordered">
-        {loading ? "Iniciando sesión..." : "Iniciar sesión"}
+        {loading ? <CircularProgress size="sm" /> : "Iniciar sesión"}
       </Button>
 
       <div className="flex flex-col gap-2 mt-10 text-sm">
