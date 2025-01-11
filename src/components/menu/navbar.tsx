@@ -10,7 +10,7 @@ import {
 
 import { button as buttonStyles } from "@nextui-org/theme";
 
-import LoginModal from "./login-modal";
+import LoginModal from "../login-modal";
 
 import { ThemeSwitch } from "@/components/theme-switch";
 import { siteConfig } from "@/config/site";

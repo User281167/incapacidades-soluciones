@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/navbar";
+import { Navbar } from "@/components/menu/navbar";
 import Footer from "@/components/footer";
 
 export default function MainLayout({
@@ -9,9 +9,7 @@ export default function MainLayout({
   return (
     <>
       <Navbar />
-      <main className="relative flex flex-col min-h-[70vh] bg-main-white dark:bg-neutral-900">
-        {children}
-      </main>
+      <main className="relative flex flex-col min-h-[70vh]">{children}</main>
       <Footer />
     </>
   );

@@ -23,8 +23,8 @@ export default function UserMenu() {
   const { user } = useAuth();
 
   return (
-    <nav className="flex flex-col gap-2">
-      <Card className="w-full md:max-w-[400px] bg-main-light-blue h-screen dark:bg-main-dark-blue">
+    <nav className="flex flex-col gap-2 w-fit">
+      <Card className="w-full md:max-w-[400px] h-screen bg-main-light-blue dark:bg-main-dark-blue">
         <CardHeader className="flex justify-between items-center">
           <Avatar name={user.name} size="lg" />
 
