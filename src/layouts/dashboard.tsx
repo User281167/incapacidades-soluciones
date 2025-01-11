@@ -1,5 +1,6 @@
 "use client";
 
+import UserMenu from "@/components/menu/user-menu";
 import { useAuth } from "@/hooks/use-auth";
 import { useEffect } from "react";
 
@@ -19,9 +20,9 @@ export default function DashboardLayout({
   }, [loading, isLogin]);
 
   return (
-    <>
-      <h1>Dashboard</h1>
+    <article>
+      <UserMenu />
       <main>{children}</main>
-    </>
+    </article>
   );
 }

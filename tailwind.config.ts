@@ -16,6 +16,7 @@ export default {
         "main-blue": "var(--main-blue)",
         "main-blue-80": "var(--main-blue-80)",
         "main-light-blue": "var(--main-light-blue)",
+        "main-diamond": "var(--main-diamond)",
         "main-dark-blue": "var(--main-dark-blue)",
         "main-white": "var(--main-white)",
         "main-gray": "var(--main-gray)",
