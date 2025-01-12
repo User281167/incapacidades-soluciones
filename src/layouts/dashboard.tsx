@@ -20,7 +20,7 @@ export default function DashboardLayout({
   }, [loading, isLogin]);
 
   return (
-    <article>
+    <article className="flex flex-col md:flex-row gap-4">
       <UserMenu />
       <main>{children}</main>
     </article>
