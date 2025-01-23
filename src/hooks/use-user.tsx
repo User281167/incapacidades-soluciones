@@ -1,36 +1,45 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 import { getCollaborator as getCollaboratorInfo } from "@/services/user.API";
-
-import { Collaborator, User } from "@/types/models/user";
+import { Collaborator } from "@/types/models/user";
 import { ApiRes } from "@/types/api-res";
+import { useAuth } from "./use-auth";
+
 import Cookies from "js-cookie";
 
-interface contextType {
+export interface UserContextType {
   collaborator: Collaborator | null;
   loading: boolean;
   errorMessage: string | null;
   getCollaborator: (id: string) => Promise<void>;
 }
 
-const userContext = createContext({} as contextType);
+const UserContext = createContext({} as UserContextType);
 
 function UserProvider({ children }: { children: React.ReactNode }) {
   const [errorMessage, setErrorMessage] = useState<string | null>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [collaborator, setCollaborator] = useState<Collaborator | null>(() => {
+  const [collaborator, setCollaborator] = useState<Collaborator | null>(null);
+
+  const { user, isLogin, loading: authLoading } = useAuth();
+
+  useEffect(() => {
+    if (authLoading || !isLogin) return;
+
     const info = Cookies.get("collaborator");
-    return info ? JSON.parse(info) : null;
-  });
 
-  useCallback(() => {
-    const userItem = Cookies.get("user");
-
-    if (!collaborator || userItem) {
-      const user: User = JSON.parse(userItem ?? "");
+    if (!info && user !== null) {
       getCollaborator(user.id);
+    } else if (info) {
+      setCollaborator(JSON.parse(info) as Collaborator);
+    }
+  }, [isLogin, user, authLoading]);
+
+  useEffect(() => {
+    if (collaborator) {
+      Cookies.set("collaborator", JSON.stringify(collaborator));
     }
   }, [collaborator]);
 
@@ -48,7 +57,7 @@ function UserProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <userContext.Provider
+    <UserContext.Provider
       value={{
         collaborator,
         loading,
@@ -57,10 +66,10 @@ function UserProvider({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
-    </userContext.Provider>
+    </UserContext.Provider>
   );
 }
 
-const useUser = () => useContext(userContext);
+const useUser = () => useContext(UserContext);
 
-export { UserProvider, useUser };
+export { UserProvider, UserContext, useUser };

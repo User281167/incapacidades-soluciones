@@ -189,6 +189,8 @@ describe("Auth context login", () => {
   beforeEach(() => {
     mockAxios.get.mockClear();
     mockAxios.post.mockClear();
+    Cookies.remove("token");
+    Cookies.remove("user");
   });
 
   const formData = {
@@ -245,7 +247,7 @@ describe("Auth context login", () => {
     });
   });
 
-  test("Is login success", async () => {
+  test("Is login success, save cookie", async () => {
     mockAxios.post.mockResolvedValueOnce({
       data: { token: "token", user: { name: "test" } as User },
     });
@@ -261,5 +263,7 @@ describe("Auth context login", () => {
       expect(result.current.isLogin).toBe(true);
       expect(result.current.user.name).toBe("test");
     });
+
+    expect(Cookies.get("token")).toBe("token");
   });
 });

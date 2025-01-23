@@ -5,6 +5,10 @@ export const mockAxios = {
   post: vi.fn(),
   delete: vi.fn(),
   put: vi.fn(),
+  interceptors: {
+    request: { use: vi.fn(), eject: vi.fn() },
+    response: { use: vi.fn(), eject: vi.fn() },
+  },
 };
 
 const mockAxiosInstance = {
@@ -14,8 +18,10 @@ const mockAxiosInstance = {
       post: mockAxios.post,
       delete: mockAxios.delete,
       put: mockAxios.put,
+      interceptors: mockAxios.interceptors,
     })),
   },
+  ...mockAxios,
 };
 
 export default mockAxiosInstance;

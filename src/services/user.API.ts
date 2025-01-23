@@ -11,7 +11,7 @@ const API = axios.create({
   withCredentials: true,
 });
 
-axios.interceptors.request.use(
+API.interceptors.request.use(
   (config) => {
     const token = Cookies.get("token");
 

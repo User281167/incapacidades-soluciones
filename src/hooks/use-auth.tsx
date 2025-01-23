@@ -14,7 +14,7 @@ import { User } from "@/types/models/user";
 import { loginUser, signUpCompany, signUpEmployee } from "@/services/login.API";
 import Cookies from "js-cookie";
 
-interface contextType {
+export interface AuthContextType {
   token: string;
   user: User;
   errorMessage: string | null;
@@ -25,7 +25,7 @@ interface contextType {
   login: (credentials: LoginForm) => Promise<void>;
 }
 
-const userContext = createContext({} as contextType);
+const AuthContext = createContext({} as AuthContextType);
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const [errorMessage, setErrorMessage] = useState<string | null>("");
@@ -45,8 +45,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   });
 
   const apiCheckAuth = async (res: ApiRes<AuthRes>) => {
-    // Check if the response is successful ans set user data
-    // API response always returns a APIRes object
+    // Check if the response is successful and set user data
+    // API response always returns an APIRes object
 
     if (!res.success) {
       setErrorMessage(res.errorMessage);
@@ -90,7 +90,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <userContext.Provider
+    <AuthContext.Provider
       value={{
         token,
         user,
@@ -103,10 +103,10 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
-    </userContext.Provider>
+    </AuthContext.Provider>
   );
 }
 
-const useAuth = () => useContext(userContext);
+const useAuth = () => useContext(AuthContext);
 
-export { AuthProvider, useAuth };
+export { AuthProvider, AuthContext, useAuth };
