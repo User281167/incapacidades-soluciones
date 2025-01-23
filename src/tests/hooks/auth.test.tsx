@@ -1,17 +1,19 @@
 import { beforeEach, describe, expect, test } from "vitest";
 import { AuthProvider, useAuth } from "@/hooks/use-auth";
 import { act, renderHook } from "@testing-library/react";
-import { SignUpCompanyForm, SignUpEmployeeForm } from "@/types/forms/sign-up";
-import { User } from "@/types/models/user";
 import { mockAxios } from "../mocks/axios-mock";
+
+import { SignUpCompanyForm, SignUpEmployeeForm } from "@/types/forms/sign-up";
+import { COOKIES_ITEM } from "@/types/cookies-item";
+import { User } from "@/types/models/user";
 import Cookies from "js-cookie";
 
 describe("Auth context signUpCompany", () => {
   beforeEach(() => {
     mockAxios.get.mockClear();
     mockAxios.post.mockClear();
-    Cookies.remove("token");
-    Cookies.remove("user");
+    Cookies.remove(COOKIES_ITEM.ACCESS_TOKEN);
+    Cookies.remove(COOKIES_ITEM.USER);
   });
 
   const formData = {
@@ -103,8 +105,8 @@ describe("Auth context signUp", () => {
   beforeEach(() => {
     mockAxios.get.mockClear();
     mockAxios.post.mockClear();
-    Cookies.remove("token");
-    Cookies.remove("user");
+    Cookies.remove(COOKIES_ITEM.ACCESS_TOKEN);
+    Cookies.remove(COOKIES_ITEM.USER);
   });
 
   const formData = {
@@ -189,8 +191,8 @@ describe("Auth context login", () => {
   beforeEach(() => {
     mockAxios.get.mockClear();
     mockAxios.post.mockClear();
-    Cookies.remove("token");
-    Cookies.remove("user");
+    Cookies.remove(COOKIES_ITEM.ACCESS_TOKEN);
+    Cookies.remove(COOKIES_ITEM.USER);
   });
 
   const formData = {
@@ -264,6 +266,6 @@ describe("Auth context login", () => {
       expect(result.current.user.name).toBe("test");
     });
 
-    expect(Cookies.get("token")).toBe("token");
+    expect(Cookies.get(COOKIES_ITEM.ACCESS_TOKEN)).toBe("token");
   });
 });

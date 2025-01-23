@@ -1,17 +1,21 @@
-import DashboardPage from "@/app/dashboard/page";
 import { act, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, test } from "vitest";
 import { mockAxios } from "../mocks/axios-mock";
+
 import { AuthContext, AuthContextType } from "@/hooks/use-auth";
-import { USER_ROLE } from "@/types/role";
-import { Collaborator, User } from "@/types/models/user";
 import { UserProvider } from "@/hooks/use-user";
+
+import DashboardPage from "@/app/dashboard/page";
+import { Collaborator, User } from "@/types/models/user";
+import { COOKIES_ITEM } from "@/types/cookies-item";
+import { USER_ROLE } from "@/types/role";
+
 import Cookie from "js-cookie";
 
 describe("Dashboard", () => {
   beforeEach(() => {
     mockAxios.get.mockClear();
-    Cookie.remove("collaborator");
+    Cookie.remove(COOKIES_ITEM.COLLABORATOR);
   });
 
   const collaborator = {

@@ -1,9 +1,12 @@
 import axios from "axios";
 
-import { ApiRes } from "@/types/api-res";
 import { getApiErrorMessage } from "./error-api";
+
+import { ApiRes } from "@/types/api-res";
 import { BACKEND_URL } from "@/utils/env-config";
 import { Collaborator } from "@/types/models/user";
+import { COOKIES_ITEM } from "@/types/cookies-item";
+
 import Cookies from "js-cookie";
 
 const API = axios.create({
@@ -13,7 +16,7 @@ const API = axios.create({
 
 API.interceptors.request.use(
   (config) => {
-    const token = Cookies.get("token");
+    const token = Cookies.get(COOKIES_ITEM.ACCESS_TOKEN);
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;

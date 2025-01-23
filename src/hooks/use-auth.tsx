@@ -10,6 +10,7 @@ import {
 import { AuthRes } from "@/types/auth";
 import { ApiRes } from "@/types/api-res";
 import { User } from "@/types/models/user";
+import { COOKIES_ITEM } from "@/types/cookies-item";
 
 import { loginUser, signUpCompany, signUpEmployee } from "@/services/login.API";
 import Cookies from "js-cookie";
@@ -32,16 +33,16 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [isLogin, setIsLogin] = useState<boolean>(() => {
-    return Cookies.get("token") !== undefined;
+    return Cookies.get(COOKIES_ITEM.ACCESS_TOKEN) !== undefined;
   });
 
   const [user, setUser] = useState<User>(() => {
-    const user = Cookies.get("user");
+    const user = Cookies.get(COOKIES_ITEM.USER);
     return user ? JSON.parse(user) : ({} as User);
   });
 
   const [token, setToken] = useState<string>(() => {
-    return Cookies.get("token") ?? "";
+    return Cookies.get(COOKIES_ITEM.ACCESS_TOKEN) ?? "";
   });
 
   const apiCheckAuth = async (res: ApiRes<AuthRes>) => {
@@ -55,8 +56,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(res.data.user);
       setIsLogin(true);
 
-      Cookies.set("token", res.data.token);
-      Cookies.set("user", JSON.stringify(res.data.user));
+      Cookies.set(COOKIES_ITEM.ACCESS_TOKEN, res.data.token);
+      Cookies.set(COOKIES_ITEM.USER, JSON.stringify(res.data.user));
     }
 
     setLoading(false);

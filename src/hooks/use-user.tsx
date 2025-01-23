@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
 import { getCollaborator as getCollaboratorInfo } from "@/services/user.API";
+import { COOKIES_ITEM } from "@/types/cookies-item";
 import { Collaborator } from "@/types/models/user";
 import { ApiRes } from "@/types/api-res";
 import { useAuth } from "./use-auth";
@@ -28,7 +29,7 @@ function UserProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (authLoading || !isLogin) return;
 
-    const info = Cookies.get("collaborator");
+    const info = Cookies.get(COOKIES_ITEM.COLLABORATOR);
 
     if (!info && user !== null) {
       getCollaborator(user.id);
@@ -39,7 +40,7 @@ function UserProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (collaborator) {
-      Cookies.set("collaborator", JSON.stringify(collaborator));
+      Cookies.set(COOKIES_ITEM.COLLABORATOR, JSON.stringify(collaborator));
     }
   }, [collaborator]);
 
