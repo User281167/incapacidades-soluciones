@@ -13,12 +13,10 @@ import { User } from "@/types/models/user";
 
 import { loginUser, signUpCompany, signUpEmployee } from "@/services/login.API";
 import Cookies from "js-cookie";
-import { USER_ROLE } from "@/types/role";
 
 interface contextType {
   token: string;
   user: User;
-  role: USER_ROLE;
   errorMessage: string | null;
   isLogin: boolean;
   loading: boolean;

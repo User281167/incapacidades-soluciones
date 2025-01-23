@@ -11,3 +11,13 @@ export type User = {
   role: USER_ROLE;
   joinDate: string;
 };
+
+export type Collaborator = {
+  position?: string;
+  healthEntity?: string;
+  inability: boolean;
+  hasReplacement: boolean;
+  isReplacing: boolean;
+  bankingEntity?: string;
+  bankAccount?: string;
+};

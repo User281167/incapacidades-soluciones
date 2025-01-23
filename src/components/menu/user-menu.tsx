@@ -34,7 +34,7 @@ export default function UserMenu() {
   return (
     <nav className="flex flex-col gap-2 md:w-fit relative">
       <div
-        className={`w-full h-12 md:w-16 md:h-screen md:bg-main-diamond flex md:justify-center items-center px-2 md:px-0 ${
+        className={`w-full h-12 md:w-16 md:h-screen bg-main-light-blue dark:bg-main-dark-blue flex md:justify-center items-center px-2 md:px-0 ${
           showMenu ? "hidden" : ""
         }`}
       >
