@@ -24,6 +24,7 @@ export interface AuthContextType {
   signUpLeader: (data: SignUpCompanyForm) => Promise<void>;
   signUp: (data: SignUpEmployeeForm) => Promise<void>;
   login: (credentials: LoginForm) => Promise<void>;
+  logout: () => void;
 }
 
 const AuthContext = createContext({} as AuthContextType);
@@ -90,6 +91,21 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     apiCheckAuth(res);
   };
 
+  const logout = () => {
+    setErrorMessage(null);
+    setLoading(true);
+
+    Cookies.remove(COOKIES_ITEM.ACCESS_TOKEN);
+    Cookies.remove(COOKIES_ITEM.USER);
+    Cookies.remove(COOKIES_ITEM.COLLABORATOR);
+
+    setToken("");
+    setUser({} as User);
+    setErrorMessage(null);
+    setIsLogin(false);
+    setLoading(false);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -101,6 +117,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
         loading,
         signUp,
         login,
+        logout,
       }}
     >
       {children}

@@ -27,7 +27,7 @@ import { ThemeSwitch } from "../theme-switch";
 import { useState } from "react";
 
 export default function UserMenu() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   const [showMenu, setShowMenu] = useState(false);
 
@@ -88,7 +88,7 @@ export default function UserMenu() {
               );
             })}
 
-            <Button className="p-6">
+            <Button className="p-6" onPress={logout}>
               <IconLogin size={24} />
               Cerrar sesión
             </Button>
