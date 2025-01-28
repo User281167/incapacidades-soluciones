@@ -3,11 +3,6 @@
 @tailwind utilities;
 
 :root {
-  --background-light: #ffffff;
-  --foreground-light: #171717;
-  --background-dark: #222;
-  --foreground-dark: #ededed;
-
   --main-blue: #56a4c1;
   --main-blue-80: rgba(86, 164, 193, 0.8);
   --main-light-blue: #80d9ea;
@@ -16,12 +11,25 @@
   --main-white: #fafeff;
   --main-gray: #4a5257;
 
+  --background-light: #f2f2f2;
+  --background-dark: #242424;
+  --foreground-light: #171717;
+  --foreground-dark: #ededed;
+
+  --background: #f2f2f2;
+  --foreground: #171717;
+}
+.light {
   --background: var(--background-light);
   --foreground: var(--foreground-light);
 }
 
+.dark {
+  --background: var(--background-dark);
+  --foreground: var(--foreground-dark);
+}
+
 body {
-  color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--foreground);
 }

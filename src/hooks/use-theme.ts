@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Cookies from "js-cookie";
 
 const ThemeProps = {
   key: "theme",
@@ -13,16 +14,7 @@ type Theme = typeof ThemeProps.light | typeof ThemeProps.dark;
 
 export const useTheme = (defaultTheme?: Theme) => {
   const [theme, setTheme] = useState<Theme>(() => {
-    // const storedTheme = Cookies.get(ThemeProps.key) as Theme | null;
-
-    // const storedTheme = Cookies.get(ThemeProps.key) as Theme | null;
-
-    let storedTheme = null;
-
-    if (typeof window !== "undefined" && window.localStorage) {
-      storedTheme = window.localStorage.getItem(ThemeProps.key) as Theme | null;
-    }
-
+    const storedTheme = Cookies.get(ThemeProps.key) as Theme | null;
     return storedTheme || (defaultTheme ?? ThemeProps.light);
   });
 
@@ -35,9 +27,7 @@ export const useTheme = (defaultTheme?: Theme) => {
   }, [theme]);
 
   const _setTheme = (theme: Theme) => {
-    if (typeof window !== "undefined" && window.localStorage) {
-      window.localStorage.setItem(ThemeProps.key, theme);
-    }
+    Cookies.set(ThemeProps.key, theme);
 
     document.documentElement.classList.remove(
       ThemeProps.light,
@@ -45,22 +35,6 @@ export const useTheme = (defaultTheme?: Theme) => {
     );
 
     document.documentElement.classList.add(theme);
-
-    // Dynamically update CSS variables
-    document.documentElement.style.setProperty(
-      "--background",
-      theme === ThemeProps.light
-        ? "var(--background-light)"
-        : "var(--background-dark)"
-    );
-
-    document.documentElement.style.setProperty(
-      "--foreground",
-      theme === ThemeProps.light
-        ? "var(--foreground-light)"
-        : "var(--foreground-dark)"
-    );
-
     setTheme(theme);
   };
 
