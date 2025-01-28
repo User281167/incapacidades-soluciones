@@ -31,7 +31,7 @@ const AuthContext = createContext({} as AuthContextType);
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const [errorMessage, setErrorMessage] = useState<string | null>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const [isLogin, setIsLogin] = useState<boolean>(() => {
     return Cookies.get(COOKIES_ITEM.ACCESS_TOKEN) !== undefined;
@@ -43,7 +43,9 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   });
 
   const [token, setToken] = useState<string>(() => {
-    return Cookies.get(COOKIES_ITEM.ACCESS_TOKEN) ?? "";
+    const jwt = Cookies.get(COOKIES_ITEM.ACCESS_TOKEN) ?? "";
+    setLoading(false);
+    return jwt;
   });
 
   const apiCheckAuth = async (res: ApiRes<AuthRes>) => {
