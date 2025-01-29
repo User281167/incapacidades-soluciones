@@ -10,6 +10,7 @@ export type User = {
   phone: string;
   role: USER_ROLE;
   joinDate: string;
+  photo?: string | null; // URL
 };
 
 export type Collaborator = {

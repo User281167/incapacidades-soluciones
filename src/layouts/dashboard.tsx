@@ -22,7 +22,7 @@ export default function DashboardLayout({
   return (
     <article className="flex flex-col md:flex-row gap-4">
       <UserMenu />
-      <main>{children}</main>
+      <main className="flex-1">{children}</main>
     </article>
   );
 }
