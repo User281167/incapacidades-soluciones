@@ -1,6 +1,13 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 import {
   LoginForm,
@@ -25,6 +32,7 @@ export interface AuthContextType {
   signUp: (data: SignUpEmployeeForm) => Promise<void>;
   login: (credentials: LoginForm) => Promise<void>;
   logout: () => void;
+  setUser: Dispatch<SetStateAction<User>>;
 }
 
 const AuthContext = createContext({} as AuthContextType);
@@ -47,6 +55,12 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(false);
     return jwt;
   });
+
+  useEffect(() => {
+    if (user) {
+      Cookies.set(COOKIES_ITEM.USER, JSON.stringify(user));
+    }
+  }, [user]);
 
   const apiCheckAuth = async (res: ApiRes<AuthRes>) => {
     // Check if the response is successful and set user data
@@ -120,6 +134,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
         signUp,
         login,
         logout,
+        setUser,
       }}
     >
       {children}

@@ -10,15 +10,15 @@ export type User = {
   phone: string;
   role: USER_ROLE;
   joinDate: string;
-  photo?: string | null; // URL
+  photo: string | null; // URL
 };
 
 export type Collaborator = {
-  position?: string;
-  healthEntity?: string;
+  position: string | null;
+  healthEntity: string | null;
   inability: boolean;
   hasReplacement: boolean;
   isReplacing: boolean;
-  bankingEntity?: string;
-  bankAccount?: string;
+  bankingEntity: string | null;
+  bankAccount: string | null;
 };

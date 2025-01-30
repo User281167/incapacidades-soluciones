@@ -2,19 +2,26 @@
 
 import { createContext, useContext, useState, useEffect } from "react";
 
-import { getCollaborator as getCollaboratorInfo } from "@/services/user.API";
-import { COOKIES_ITEM } from "@/types/cookies-item";
-import { Collaborator } from "@/types/models/user";
+import {
+  getCollaborator as getCollaboratorInfo,
+  updateAvatar,
+} from "@/services/user.API";
+
 import { ApiRes } from "@/types/api-res";
-import { useAuth } from "./use-auth";
+import { USER_ROLE } from "@/types/role";
+import { COOKIES_ITEM } from "@/types/cookies-item";
+import { Collaborator, User } from "@/types/models/user";
 
 import Cookies from "js-cookie";
+
+import { useAuth } from "./use-auth";
 
 export interface UserContextType {
   collaborator: Collaborator | null;
   loading: boolean;
   errorMessage: string | null;
   getCollaborator: (id: string) => Promise<void>;
+  uploadPhoto: (id: string, image: File) => Promise<void>;
 }
 
 const UserContext = createContext({} as UserContextType);
@@ -24,14 +31,14 @@ function UserProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState<boolean>(false);
   const [collaborator, setCollaborator] = useState<Collaborator | null>(null);
 
-  const { user, isLogin, loading: authLoading } = useAuth();
+  const { user, setUser, isLogin, loading: authLoading } = useAuth();
 
   useEffect(() => {
     if (authLoading || !isLogin) return;
 
     const info = Cookies.get(COOKIES_ITEM.COLLABORATOR);
 
-    if (!info && user !== null) {
+    if (!info && user !== null && user.role === USER_ROLE.COLLABORATOR) {
       getCollaborator(user.id);
     } else if (info) {
       setCollaborator(JSON.parse(info) as Collaborator);
@@ -57,6 +64,23 @@ function UserProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const uploadPhoto = async (id: string, image: File) => {
+    setErrorMessage(null);
+
+    const res: ApiRes<string> = await updateAvatar(id, image);
+
+    if (res.success) {
+      const newUser: User = {
+        ...user,
+        photo: res.data + "?refresh=" + Math.random(), // add random to refresh image, to avoid caching the same image
+      };
+
+      setUser(newUser);
+    } else {
+      setErrorMessage(res.errorMessage);
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -64,6 +88,7 @@ function UserProvider({ children }: { children: React.ReactNode }) {
         loading,
         errorMessage,
         getCollaborator,
+        uploadPhoto,
       }}
     >
       {children}

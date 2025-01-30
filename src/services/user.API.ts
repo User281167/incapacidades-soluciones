@@ -33,13 +33,13 @@ export async function getCollaborator(
   id: string
 ): Promise<ApiRes<Collaborator>> {
   try {
-    const res = await API.get<Collaborator>(`/collaborator/${id}`);
+    const res = await API.get<ApiRes<Collaborator>>(`/collaborator/`, {
+      params: {
+        id: id,
+      },
+    });
 
-    return {
-      data: res.data,
-      success: true,
-      errorMessage: "",
-    };
+    return res.data;
   } catch (error) {
     const errorMessage = getApiErrorMessage(error);
 
@@ -48,5 +48,46 @@ export async function getCollaborator(
       success: false,
       errorMessage: errorMessage ?? "Error al obtener el colaborador.",
     };
+  }
+}
+
+export async function updateAvatar(
+  id: string,
+  image: File
+): Promise<ApiRes<string>> {
+  if (
+    !image ||
+    /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(image.name) === false
+  ) {
+    return ApiRes.ApiError<string>(
+      "Debes seleccionar una foto de perfil de formato JPG, JPEG, PNG, GIF, WEBP o BMP."
+    );
+  } else if (image.size > 1048576 * 2) {
+    return ApiRes.ApiError<string>("El tamaño máximo de la foto es de 2 MB.");
+  }
+
+  try {
+    const res = await API.put<ApiRes<string>>(
+      `/update-photo/`,
+      {
+        file: image,
+      },
+      {
+        params: {
+          userId: id,
+        },
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    return res.data;
+  } catch (error) {
+    const errorMessage = getApiErrorMessage(error);
+
+    return ApiRes.ApiError<string>(
+      errorMessage ?? "Error al actualizar la foto."
+    );
   }
 }
