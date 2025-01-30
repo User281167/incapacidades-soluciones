@@ -32,7 +32,7 @@ export default function UserMenu() {
   const [showMenu, setShowMenu] = useState(false);
 
   return (
-    <nav className="flex flex-col gap-2 md:w-fit relative">
+    <nav className="flex flex-col gap-2 md:w-fit relative z-[999]">
       <div
         className={`w-full h-12 md:w-16 md:h-screen bg-main-light-blue dark:bg-main-dark-blue flex justify-end md:justify-center items-center px-2 md:px-0 ${
           showMenu ? "hidden" : ""
