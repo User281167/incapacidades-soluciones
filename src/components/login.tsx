@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Input, Link, CircularProgress } from "@nextui-org/react";
-import { IconLock, IconMail } from "@tabler/icons-react";
+import { IconEye, IconLock, IconMail } from "@tabler/icons-react";
 import { Toaster, toast } from "sonner";
 
 import { siteConfig } from "@/config/site";
@@ -10,13 +10,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/hooks/use-auth";
 
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { LoginSchema } from "@/types/schemas/sign-up";
 import { LoginForm } from "@/types/forms/sign-up";
+import ShowPassword from "./show-password";
 
 export default function Login() {
   const { login, errorMessage, loading } = useAuth();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   useEffect(() => {
     if (errorMessage) {
@@ -60,13 +62,11 @@ export default function Login() {
 
       <Input
         required
-        endContent={
-          <IconLock className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-        }
+        endContent={ShowPassword({ showPassword, setShowPassword })}
         errorMessage={errors.password?.message}
         isInvalid={errors.password && true}
         placeholder="Contraseña"
-        type="password"
+        type={showPassword ? "text" : "password"}
         variant="bordered"
         {...register("password")}
       />

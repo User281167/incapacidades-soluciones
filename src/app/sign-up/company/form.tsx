@@ -1,6 +1,7 @@
 "use client";
 
 import { container, sectionTitle } from "@/components/primitives";
+import ShowPassword from "@/components/show-password";
 
 import {
   Button,
@@ -38,6 +39,7 @@ export function SignUpForm() {
 
   const { signUpLeader, errorMessage, isLogin, loading } = useAuth();
   const [founded, setFounded] = useState<DateValue | null>(null);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -200,10 +202,11 @@ export function SignUpForm() {
 
           <Input
             errorMessage={errors.password?.message}
+            endContent={ShowPassword({ showPassword, setShowPassword })}
             isInvalid={errors.password && true}
             label="Contraseña"
             labelPlacement="outside"
-            type="password"
+            type={showPassword ? "text" : "password"}
             {...register("password")}
           />
 

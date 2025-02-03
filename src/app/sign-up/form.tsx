@@ -1,7 +1,8 @@
 "use client";
 
 import { Button, Input, CircularProgress } from "@nextui-org/react";
-import { IconAccessible, IconLock } from "@tabler/icons-react";
+import { IconAccessible } from "@tabler/icons-react";
+import ShowPassword from "@/components/show-password";
 
 import { SignUpEmployeeForm } from "@/types/forms/sign-up";
 import { SignUpEmployeeSchema } from "@/types/schemas/sign-up";
@@ -12,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function SignUpForm() {
   const {
@@ -25,6 +26,8 @@ export function SignUpForm() {
 
   const { signUp, errorMessage, isLogin, loading } = useAuth();
   const router = useRouter();
+
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   useEffect(() => {
     if (errorMessage) {
@@ -119,12 +122,10 @@ export function SignUpForm() {
             required
             errorMessage={errors.password?.message}
             isInvalid={errors.password && true}
-            endContent={
-              <IconLock className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-            }
+            endContent={ShowPassword({ showPassword, setShowPassword })}
             label="Contraseña"
             labelPlacement="outside"
-            type="password"
+            type={showPassword ? "text" : "password"}
             {...register("password")}
           />
         </div>
