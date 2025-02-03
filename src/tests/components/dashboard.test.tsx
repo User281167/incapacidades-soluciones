@@ -11,6 +11,7 @@ import { COOKIES_ITEM } from "@/types/cookies-item";
 import { USER_ROLE } from "@/types/role";
 
 import Cookie from "js-cookie";
+import { ApiRes } from "@/types/api-res";
 
 describe("Dashboard", () => {
   beforeEach(() => {
@@ -65,10 +66,6 @@ describe("Dashboard", () => {
   });
 
   test("Collaborator data null", () => {
-    mockAxios.get.mockResolvedValueOnce({
-      data: collaborator,
-    });
-
     act(() => {
       renderAuthContext(
         <UserProvider>
@@ -81,9 +78,13 @@ describe("Dashboard", () => {
     expect(mockAxios.get).toHaveBeenCalledTimes(0);
   });
 
-  test("Collaborator data Cookies", async () => {
+  test("Collaborator data render", async () => {
     mockAxios.get.mockResolvedValueOnce({
-      data: collaborator,
+      data: {
+        data: collaborator,
+        success: true,
+        message: null,
+      } as ApiRes<Collaborator>,
     });
 
     await act(async () => {

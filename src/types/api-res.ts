@@ -1,19 +1,19 @@
 export class ApiRes<T> {
   data: T;
   success: boolean;
-  errorMessage: string;
+  message: string | null;
 
-  constructor(data: T, success: boolean, errorMessage: string) {
+  constructor(data: T, success: boolean, message: string | null) {
     this.data = data;
     this.success = success;
-    this.errorMessage = errorMessage;
+    this.message = message;
   }
 
-  public static ApiError<T>(errorMessage: string): ApiRes<T> {
-    return new ApiRes<T>({} as T, false, errorMessage);
+  public static Error<T>(message: string): ApiRes<T> {
+    return new ApiRes<T>({} as T, false, message);
   }
 
-  public static ApiSuccess<T>(data: T): ApiRes<T> {
+  public static Success<T>(data: T): ApiRes<T> {
     return new ApiRes<T>(data, true, "");
   }
 }

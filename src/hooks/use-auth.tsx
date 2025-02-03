@@ -67,7 +67,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     // API response always returns an APIRes object
 
     if (!res.success) {
-      setErrorMessage(res.errorMessage);
+      setErrorMessage(res.message);
     } else {
       setToken(res.data.token);
       setUser(res.data.user);

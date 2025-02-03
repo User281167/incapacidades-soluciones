@@ -43,11 +43,9 @@ export async function getCollaborator(
   } catch (error) {
     const errorMessage = getApiErrorMessage(error);
 
-    return {
-      data: {} as Collaborator,
-      success: false,
-      errorMessage: errorMessage ?? "Error al obtener el colaborador.",
-    };
+    return ApiRes.Error<Collaborator>(
+      errorMessage ?? "Error al obtener el colaborador."
+    );
   }
 }
 
@@ -55,15 +53,16 @@ export async function updateAvatar(
   id: string,
   image: File
 ): Promise<ApiRes<string>> {
+  // Check if the image is valid
   if (
     !image ||
     /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(image.name) === false
   ) {
-    return ApiRes.ApiError<string>(
+    return ApiRes.Error<string>(
       "Debes seleccionar una foto de perfil de formato JPG, JPEG, PNG, GIF, WEBP o BMP."
     );
   } else if (image.size > 1048576 * 2) {
-    return ApiRes.ApiError<string>("El tamaño máximo de la foto es de 2 MB.");
+    return ApiRes.Error<string>("El tamaño máximo de la foto es de 2 MB.");
   }
 
   try {
@@ -85,9 +84,6 @@ export async function updateAvatar(
     return res.data;
   } catch (error) {
     const errorMessage = getApiErrorMessage(error);
-
-    return ApiRes.ApiError<string>(
-      errorMessage ?? "Error al actualizar la foto."
-    );
+    return ApiRes.Error<string>(errorMessage ?? "Error al actualizar la foto.");
   }
 }

@@ -60,7 +60,7 @@ function UserProvider({ children }: { children: React.ReactNode }) {
     if (res.success) {
       setCollaborator(res.data);
     } else {
-      setErrorMessage(res.errorMessage);
+      setErrorMessage(res.message);
     }
   };
 
@@ -77,7 +77,7 @@ function UserProvider({ children }: { children: React.ReactNode }) {
 
       setUser(newUser);
     } else {
-      setErrorMessage(res.errorMessage);
+      setErrorMessage(res.message);
     }
   };
 

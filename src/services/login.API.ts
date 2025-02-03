@@ -31,7 +31,7 @@ export async function signUpCompany(
     return {
       data: {} as AuthRes,
       success: false,
-      errorMessage:
+      message:
         checkForm.message ??
         "Campos obligatorios no completados, o revisa los datos ingresados (emails, tipo de empresa, sector de la empresa).",
     };
@@ -60,17 +60,15 @@ export async function signUpCompany(
     return {
       data: res.data as AuthRes,
       success: true,
-      errorMessage: "",
+      message: "",
     };
   } catch (error) {
     const errorMessage = getApiErrorMessage(error);
 
-    console.log(error);
-
     return {
       data: {} as AuthRes,
       success: false,
-      errorMessage: errorMessage ?? "Error interno al registrar la empresa.",
+      message: errorMessage ?? "Error interno al registrar la empresa.",
     };
   }
 }
@@ -84,7 +82,7 @@ export async function signUpEmployee(
     return {
       data: {} as AuthRes,
       success: false,
-      errorMessage:
+      message:
         checkForm.message ??
         "Campos obligatorios no completados, o revisa los datos ingresados (emails, tipo de empresa, sector de la empresa).",
     };
@@ -96,7 +94,7 @@ export async function signUpEmployee(
     return {
       data: res.data as AuthRes,
       success: true,
-      errorMessage: "",
+      message: "",
     };
   } catch (error) {
     const errorMessage = getApiErrorMessage(error);
@@ -104,7 +102,7 @@ export async function signUpEmployee(
     return {
       data: {} as AuthRes,
       success: false,
-      errorMessage: errorMessage ?? "Error interno al registrar el empleado.",
+      message: errorMessage ?? "Error interno al registrar el empleado.",
     };
   }
 }
@@ -118,7 +116,7 @@ export async function loginUser(
     return {
       data: {} as AuthRes,
       success: false,
-      errorMessage: "Campos obligatorios no completados.",
+      message: "Campos obligatorios no completados.",
     };
   }
 
@@ -128,7 +126,7 @@ export async function loginUser(
     return {
       data: res.data as AuthRes,
       success: true,
-      errorMessage: "",
+      message: "",
     };
   } catch (error) {
     const errorMessage = getApiErrorMessage(error);
@@ -136,7 +134,7 @@ export async function loginUser(
     return {
       data: {} as AuthRes,
       success: false,
-      errorMessage: errorMessage ?? "Error al intentar iniciar sesión.",
+      message: errorMessage ?? "Error al intentar iniciar sesión.",
     };
   }
 }
