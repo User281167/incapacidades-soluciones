@@ -3,6 +3,7 @@
 import UserMenu from "@/components/menu/user-menu";
 import { useAuth } from "@/hooks/use-auth";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function DashboardLayout({
   children,
@@ -10,14 +11,15 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const { isLogin, loading } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     if (loading) return;
 
     if (!isLogin) {
-      window.location.href = "/";
+      router.push("/");
     }
-  }, [loading, isLogin]);
+  }, [loading, isLogin, router]);
 
   return (
     <article className="flex flex-col md:flex-row gap-4">

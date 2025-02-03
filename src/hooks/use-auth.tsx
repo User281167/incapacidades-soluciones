@@ -17,10 +17,9 @@ import {
 import { AuthRes } from "@/types/auth";
 import { ApiRes } from "@/types/api-res";
 import { User } from "@/types/models/user";
-import { COOKIES_ITEM } from "@/types/cookies-item";
+import { COOKIES_ITEM, CookiesApp } from "@/types/cookies-item";
 
 import { loginUser, signUpCompany, signUpEmployee } from "@/services/login.API";
-import Cookies from "js-cookie";
 
 export interface AuthContextType {
   token: string;
@@ -37,28 +36,40 @@ export interface AuthContextType {
 
 const AuthContext = createContext({} as AuthContextType);
 
-function AuthProvider({ children }: { children: React.ReactNode }) {
+function AuthProvider({
+  children,
+  initToken,
+  initUser,
+  initIsLogin,
+}: {
+  children: React.ReactNode;
+  initToken?: string;
+  initUser?: User;
+  initIsLogin?: boolean;
+}) {
   const [errorMessage, setErrorMessage] = useState<string | null>("");
   const [loading, setLoading] = useState<boolean>(true);
 
   const [isLogin, setIsLogin] = useState<boolean>(() => {
-    return Cookies.get(COOKIES_ITEM.ACCESS_TOKEN) !== undefined;
+    return (
+      initIsLogin ?? CookiesApp.get<string>(COOKIES_ITEM.ACCESS_TOKEN) !== null
+    );
   });
 
   const [user, setUser] = useState<User>(() => {
-    const user = Cookies.get(COOKIES_ITEM.USER);
-    return user ? JSON.parse(user) : ({} as User);
+    return initUser ?? CookiesApp.get<User>(COOKIES_ITEM.USER) ?? ({} as User);
   });
 
   const [token, setToken] = useState<string>(() => {
-    const jwt = Cookies.get(COOKIES_ITEM.ACCESS_TOKEN) ?? "";
+    const jwt =
+      initToken ?? CookiesApp.get<string>(COOKIES_ITEM.ACCESS_TOKEN) ?? "";
     setLoading(false);
     return jwt;
   });
 
   useEffect(() => {
     if (user) {
-      Cookies.set(COOKIES_ITEM.USER, JSON.stringify(user));
+      CookiesApp.set(COOKIES_ITEM.USER, user);
     }
   }, [user]);
 
@@ -73,8 +84,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(res.data.user);
       setIsLogin(true);
 
-      Cookies.set(COOKIES_ITEM.ACCESS_TOKEN, res.data.token);
-      Cookies.set(COOKIES_ITEM.USER, JSON.stringify(res.data.user));
+      CookiesApp.set(COOKIES_ITEM.ACCESS_TOKEN, res.data.token);
+      CookiesApp.set(COOKIES_ITEM.USER, res.data.user);
     }
 
     setLoading(false);
@@ -110,16 +121,12 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = () => {
     setErrorMessage(null);
     setLoading(true);
-
-    Cookies.remove(COOKIES_ITEM.ACCESS_TOKEN);
-    Cookies.remove(COOKIES_ITEM.USER);
-    Cookies.remove(COOKIES_ITEM.COLLABORATOR);
-
     setToken("");
     setUser({} as User);
     setErrorMessage(null);
     setIsLogin(false);
     setLoading(false);
+    CookiesApp.clearAuth();
   };
 
   return (

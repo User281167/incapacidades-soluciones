@@ -71,7 +71,7 @@ export const ASSISTANT_MENU: MenuItem[] = [
 
 export const LEADER_MENU: MenuItem[] = [
   {
-    href: "/leader/company-info",
+    href: "dashboard/leader/company-info",
     icon: <IconBuildingBank size={48} stroke={1.5} />,
     label: "Información de la empresa",
   },

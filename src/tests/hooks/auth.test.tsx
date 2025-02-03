@@ -4,7 +4,7 @@ import { act, renderHook } from "@testing-library/react";
 import { mockAxios } from "../mocks/axios-mock";
 
 import { SignUpCompanyForm, SignUpEmployeeForm } from "@/types/forms/sign-up";
-import { COOKIES_ITEM } from "@/types/cookies-item";
+import { COOKIES_ITEM, CookiesApp } from "@/types/cookies-item";
 import { User } from "@/types/models/user";
 import Cookies from "js-cookie";
 
@@ -12,8 +12,7 @@ describe("Auth context signUpCompany", () => {
   beforeEach(() => {
     mockAxios.get.mockClear();
     mockAxios.post.mockClear();
-    Cookies.remove(COOKIES_ITEM.ACCESS_TOKEN);
-    Cookies.remove(COOKIES_ITEM.USER);
+    CookiesApp.clearAuth();
   });
 
   const formData = {

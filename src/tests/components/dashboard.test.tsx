@@ -1,8 +1,8 @@
-import { act, render, screen } from "@testing-library/react";
+import { act, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, test } from "vitest";
 import { mockAxios } from "../mocks/axios-mock";
 
-import { AuthContext, AuthContextType } from "@/hooks/use-auth";
+import { AuthContextType } from "@/hooks/use-auth";
 import { UserProvider } from "@/hooks/use-user";
 
 import DashboardPage from "@/app/dashboard/page";
@@ -12,6 +12,7 @@ import { USER_ROLE } from "@/types/role";
 
 import Cookie from "js-cookie";
 import { ApiRes } from "@/types/api-res";
+import { RenderAuthContext } from "./render-auth";
 
 describe("Dashboard", () => {
   beforeEach(() => {
@@ -41,18 +42,16 @@ describe("Dashboard", () => {
     joinDate: "2023-01-01",
   } as User;
 
-  const renderAuthContext = (
-    ui: React.ReactElement,
-    prompts: AuthContextType = { isLogin: true, user: user } as AuthContextType
-  ) => {
-    return render(
-      <AuthContext.Provider value={prompts}>{ui}</AuthContext.Provider>
-    );
-  };
-
   test("Render user data", () => {
     act(() => {
-      renderAuthContext(<DashboardPage />);
+      RenderAuthContext({
+        ui: (
+          <UserProvider>
+            <DashboardPage />
+          </UserProvider>
+        ),
+        value: { isLogin: true, user: user } as AuthContextType,
+      });
     });
 
     expect(screen.getByText(user.name)).toBeInTheDocument();
@@ -67,12 +66,14 @@ describe("Dashboard", () => {
 
   test("Collaborator data null", () => {
     act(() => {
-      renderAuthContext(
-        <UserProvider>
-          <DashboardPage />
-        </UserProvider>,
-        { isLogin: false, user: user } as AuthContextType
-      );
+      RenderAuthContext({
+        ui: (
+          <UserProvider>
+            <DashboardPage />
+          </UserProvider>
+        ),
+        value: { isLogin: false, user: user } as AuthContextType,
+      });
     });
 
     expect(mockAxios.get).toHaveBeenCalledTimes(0);
@@ -88,11 +89,14 @@ describe("Dashboard", () => {
     });
 
     await act(async () => {
-      renderAuthContext(
-        <UserProvider>
-          <DashboardPage />
-        </UserProvider>
-      );
+      RenderAuthContext({
+        ui: (
+          <UserProvider>
+            <DashboardPage />
+          </UserProvider>
+        ),
+        value: { isLogin: true, user: user } as AuthContextType,
+      });
     });
 
     expect(mockAxios.get).toHaveBeenCalledTimes(1);
